@@ -18,7 +18,7 @@ class Custom_data_loader_for_Seg(Dataset):
         os.makedirs(output_dir, exist_ok=True)
         unique_labels=np.unique(labels)
         for i in unique_labels:
-            plt.imsave(output_dir + '/' + str(i) + 'png', (labels==i).astype(np.uint8)*255, cmap='gray')
+            plt.imsave(output_dir + '/' + str(i) + '.png', (labels==i).astype(np.uint8)*255, cmap='gray')
 
     def __getitem__(self, item):
         '''
@@ -37,7 +37,15 @@ class Custom_data_loader_for_Seg(Dataset):
         return  len(self.all_images)
 
 if __name__ == '__main__':
-    dataset=Custom_data_loader_for_Seg(data_path,output_path,label_path)
+        customDataLoaderObject = DataLoader(
+        Custom_data_loader_for_Seg(data_path,output_path,label_path),
+        batch_size=1,
+        num_workers=0,
+        shuffle=True
+    )
+
+    for images in enumerate(customDataLoaderObject):
+        print(images)
 
 
 
