@@ -34,6 +34,7 @@ class Custom_data_loader_for_Seg(Dataset):
 
 
     def aspect_resize(self, image, convert=None):
+        image=(image*255).astype(np.uint8)
         aspect= image.shape[1]/image.shape[0]
         if aspect==self.aspect_ratio:
             image = np.asarray(image)
@@ -52,7 +53,8 @@ class Custom_data_loader_for_Seg(Dataset):
         target=np.zeros([image.shape[0], image.shape[1]]) #array of zeros(576*1024)
         labeldir=self.label_path + '/' + self.all_images[item][:-4]
         for labelI in sorted(os.listdir(labeldir)):
-            targetI=cv2.imread(label_path + '/' + labelI)
+            targetI= cv2.imread(label_path + '/' + self.all_images[item][:-4] + '/' + labelI)
+            targetI= cv2.cvtColor(targetI, cv2.COLOR_BGR2GRAY)
             targetI=self.aspect_resize(targetI, 'L')
             target[targetI==255]=self.labelMapping.index(int(labelI.split('.')[0]))
         return image.transpose(2,0,1).astype(np.float32)/255, target.astype(np.int64)
@@ -69,7 +71,7 @@ if __name__ == '__main__':
     setOf=set()
     for data, targetI in progress_bar:
         setOf.update(set(np.unique(targetI).tolist()))
-        progress_bar.set_descriptiom(str(setOf))
+        progress_bar.set_description(str(setOf))
 
 
 
