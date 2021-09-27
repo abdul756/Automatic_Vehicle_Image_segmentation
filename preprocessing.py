@@ -1,10 +1,11 @@
 import numpy as np
 import os
-from torch.utils.data import  Dataset
+from torch.utils.data import  Dataset, DataLoader
 import matplotlib.pyplot as plt
 data_path='D:/Automatic Vehicle Segmentation/bdd100k_images_10k/bdd100k/images/10k/train'
 label_path='D:/Automatic Vehicle Segmentation/bdd100k_sem_seg_labels_trainval/bdd100k/labels/sem_seg/masks/train'
-output_path='D:/Automatic Vehicle Segmentation/bdd100k_sem_seg_labels_trainval/bdd100k/labels/sem_seg/masks'
+output_path='D:/Automatic Vehicle Segmentation/bdd100k_sem_seg_labels_trainval/bdd100k/labels/sem_seg/masks/train_labels_images'
+
 class Custom_data_loader_for_Seg(Dataset):
     def __init__(self,path,output_path, label_path):  # initialisation of variables
         self.path=path
@@ -37,7 +38,7 @@ class Custom_data_loader_for_Seg(Dataset):
         return  len(self.all_images)
 
 if __name__ == '__main__':
-        customDataLoaderObject = DataLoader(
+    customDataLoaderObject = DataLoader(
         Custom_data_loader_for_Seg(data_path,output_path,label_path),
         batch_size=1,
         num_workers=0,
@@ -46,6 +47,8 @@ if __name__ == '__main__':
 
     for images in enumerate(customDataLoaderObject):
         print(images)
+
+
 
 
 
